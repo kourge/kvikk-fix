@@ -1,0 +1,50 @@
+{
+  "name": "kvikk-fix",
+  "version": "0.0.1",
+  "description": "Apply prettier to all TypeScript files in your project",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest",
+    "lint": "tslint --project tsconfig.json",
+    "build": "tsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kourge/kvikk-fix.git"
+  },
+  "keywords": [
+    "typescript",
+    "prettier"
+  ],
+  "author": "Wil Lee <kourge@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/kourge/kvikk-fix/issues"
+  },
+  "homepage": "https://github.com/kourge/kvikk-fix#readme",
+  "devDependencies": {
+    "@types/jest": "^20.0.8",
+    "@types/node": "^8.0.28",
+    "@types/prettier": "^1.6.1",
+    "jest": "^21.0.2",
+    "memory-fs": "^0.4.1",
+    "prettier": "^1.6.1",
+    "ts-jest": "^21.0.0",
+    "tslint": "^5.7.0",
+    "typescript": "^2.5.2"
+  },
+  "jest": {
+    "transform": {
+      "^.+\\.tsx?$": "<rootDir>/node_modules/ts-jest/preprocessor.js"
+    },
+    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "jsx",
+      "json"
+    ]
+  },
+  "dependencies": {}
+}
