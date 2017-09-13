@@ -49,5 +49,8 @@
       "json"
     ]
   },
-  "dependencies": {}
+  "peerDependencies": {
+    "prettier": ">=1.6.0",
+    "typescript": ">=2.1.0"
+  }
 }
