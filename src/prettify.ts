@@ -15,7 +15,9 @@ export async function prettifyFile(
   filename: string,
   host: RewriteFileHost = defaultRewriteFileHost,
 ): Promise<void> {
-  const config = await host.resolveConfig(filename);
+  const resolvedConfig = await host.resolveConfig(filename);
+  const config: prettier.Options = {parser: 'typescript', ...resolvedConfig};
+
   const oldSource = host.readFile(filename);
   if (!oldSource) {
     throw new Error(`Failed to read file ${filename}`);

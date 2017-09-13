@@ -1,16 +1,21 @@
 import * as MemoryFileSystem from 'memory-fs';
 import * as prettier from 'prettier';
-import {prettifyFile, RewriteFileHost} from './prettify';
+import {prettifyFile} from './prettify';
 
 const TEST_FILENAME = '/test.ts';
+const TYPED_FILENAME = '/test2.ts';
 
-function makeHost(): RewriteFileHost {
+function makeHost() {
   const fs = new MemoryFileSystem();
   fs.writeFileSync(TEST_FILENAME, `
     const x  =  1;
   `, 'utf8');
+  fs.writeFileSync(TYPED_FILENAME, `
+    export function toNumber< N extends number >(n: N): number { return +n; }
+  `, 'utf8');
 
   return {
+    fs,
     readFile: (path: string, encoding: string = 'utf8') => (
       fs.readFileSync(path, encoding)
     ),
@@ -60,6 +65,15 @@ describe('prettifyFile', () => {
     const host = makeHost();
 
     const result = prettifyFile(TEST_FILENAME, host);
+    return expect(result).resolves.toBeUndefined();
+  });
+
+  it('resolves when fed a TypeScript file with no prettierrc', () => {
+    const host = makeHost();
+    host.resolveConfig = async () => null;
+    host.format = prettier.format;
+
+    const result = prettifyFile(TYPED_FILENAME, host);
     return expect(result).resolves.toBeUndefined();
   });
 });
