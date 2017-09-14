@@ -1,6 +1,6 @@
 {
   "name": "kvikk-fix",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Apply prettier to all TypeScript files in your project",
   "main": "index.js",
   "bin": {
