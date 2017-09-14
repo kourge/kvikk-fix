@@ -31,7 +31,6 @@
     "@types/prettier": "^1.6.1",
     "jest": "^21.0.2",
     "memory-fs": "^0.4.1",
-    "prettier": "^1.7.0",
     "ts-jest": "^21.0.0",
     "tslint": "^5.7.0",
     "typescript": "^2.5.2"
@@ -52,5 +51,8 @@
   "peerDependencies": {
     "prettier": ">=1.6.0",
     "typescript": ">=2.1.0"
+  },
+  "dependencies": {
+    "prettier": "^1.7.0"
   }
 }
