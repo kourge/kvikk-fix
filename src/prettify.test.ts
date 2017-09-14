@@ -76,4 +76,17 @@ describe('prettifyFile', () => {
     const result = prettifyFile(TYPED_FILENAME, host);
     return expect(result).resolves.toBeUndefined();
   });
+
+  it('rewrites a file that does not conform to guideline', done => {
+    const host = makeHost();
+    host.format = prettier.format;
+
+    const expected = 'const x = 1;\n';
+
+    prettifyFile(TEST_FILENAME, host).then(() => {
+      const result = host.fs.readFileSync(TEST_FILENAME);
+      expect(result.toString('utf8')).toEqual(expected);
+      done();
+    });
+  });
 });
