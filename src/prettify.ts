@@ -1,14 +1,15 @@
-import * as prettier from 'prettier';
+import * as Prettier from 'prettier';
 import * as ts from 'typescript';
+import {selectedPrettier as prettier} from './prettier';
 
 export interface RewriteFileHost {
   readFile(path: string, encoding?: string): string | undefined;
   writeFile(path: string, data: string, writeByteOrderMark?: boolean): void;
   resolveConfig(
     filePath?: string,
-    options?: prettier.ResolveConfigOptions,
-  ): Promise<null | prettier.Options>;
-  format(source: string, options?: prettier.Options): string;
+    options?: Prettier.ResolveConfigOptions,
+  ): Promise<null | Prettier.Options>;
+  format(source: string, options?: Prettier.Options): string;
 }
 
 export async function prettifyFile(
@@ -16,7 +17,7 @@ export async function prettifyFile(
   host: RewriteFileHost = defaultRewriteFileHost,
 ): Promise<void> {
   const resolvedConfig = await host.resolveConfig(filename);
-  const config: prettier.Options = {parser: 'typescript', ...resolvedConfig};
+  const config: Prettier.Options = {parser: 'typescript', ...resolvedConfig};
 
   const oldSource = host.readFile(filename);
   if (!oldSource) {
