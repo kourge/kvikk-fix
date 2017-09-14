@@ -2,31 +2,63 @@ import * as Prettier from 'prettier';
 import * as ts from 'typescript';
 import {selectedPrettier as prettier} from './prettier';
 
+/**
+ * A `RewriteFileHost` contains implementations of the functions needed to
+ * rewrite a file using prettier.
+ */
 export interface RewriteFileHost {
+  /**
+   * Reads a file synchronously. Usually implemented by `ts.sys`.
+   */
   readFile(path: string, encoding?: string): string | undefined;
+
+  /**
+   * Writes a file synchronously. Usually implemented by `ts.sys`.
+   */
   writeFile(path: string, data: string, writeByteOrderMark?: boolean): void;
+
+  /**
+   * Resolves the prettier config for a given `filePath`. Consult the prettier
+   * docs for more information.
+   */
   resolveConfig(
     filePath?: string,
     options?: Prettier.ResolveConfigOptions,
   ): Promise<null | Prettier.Options>;
+
+  /**
+   * Formats `source` text using prettier.
+   */
   format(source: string, options?: Prettier.Options): string;
 }
 
+/**
+ * Rewrites the file at the given `path` using prettier.
+ * @param path The path of the file to rewrite
+ * @param host A `RewriteFileHost` for file system and rewrite operations
+ * @return A promise that resolves if the rewrite operation succeeded, or
+ * rejects if it did not.
+ */
 export async function prettifyFile(
-  filename: string,
+  path: string,
   host: RewriteFileHost = defaultRewriteFileHost,
 ): Promise<void> {
-  const resolvedConfig = await host.resolveConfig(filename);
+  const resolvedConfig = await host.resolveConfig(path);
   const config: Prettier.Options = {parser: 'typescript', ...resolvedConfig};
 
-  const oldSource = host.readFile(filename);
+  const oldSource = host.readFile(path);
   if (!oldSource) {
-    throw new Error(`Failed to read file ${filename}`);
+    throw new Error(`Failed to read file ${path}`);
   }
   const newSource = host.format(oldSource, config!);
-  return host.writeFile(filename, newSource);
+  return host.writeFile(path, newSource);
 }
 
+/**
+ * The default implementation of `RewriteFileHost`. File system operations are
+ * implemented by `ts.sys`. Reformatting operations are implemented by
+ * prettier itself.
+ */
 export const defaultRewriteFileHost: RewriteFileHost = {
   readFile: ts.sys.readFile,
   writeFile: ts.sys.writeFile,
