@@ -1,6 +1,5 @@
-import * as Prettier from 'prettier';
+import * as prettier from 'prettier';
 import * as ts from 'typescript';
-import {selectedPrettier as prettier} from './prettier';
 
 /**
  * A `RewriteFileHost` contains implementations of the functions needed to
@@ -23,13 +22,13 @@ export interface RewriteFileHost {
    */
   resolveConfig(
     filePath?: string,
-    options?: Prettier.ResolveConfigOptions,
-  ): Promise<null | Prettier.Options>;
+    options?: prettier.ResolveConfigOptions,
+  ): Promise<null | prettier.Options>;
 
   /**
    * Formats `source` text using prettier.
    */
-  format(source: string, options?: Prettier.Options): string;
+  format(source: string, options?: prettier.Options): string;
 }
 
 /**
@@ -44,7 +43,7 @@ export async function prettifyFile(
   host: RewriteFileHost = defaultRewriteFileHost,
 ): Promise<void> {
   const resolvedConfig = await host.resolveConfig(path);
-  const config: Prettier.Options = {parser: 'typescript', ...resolvedConfig};
+  const config: prettier.Options = {parser: 'typescript', ...resolvedConfig};
 
   const oldSource = host.readFile(path);
   if (!oldSource) {
