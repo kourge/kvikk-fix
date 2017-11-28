@@ -4,7 +4,7 @@ import {getProjectFileNames} from './project';
 
 export async function main(): Promise<number | undefined> {
   const args = process.argv.slice(2);
-  const fileNames = args.length ? args : getProjectFileNames();
+  const fileNames = getProjectFileNames();
   let status = 0;
 
   for (const f of fileNames) {
