@@ -1,14 +1,15 @@
 # kvikk-fix
 
-A CLI tool for applying prettier to all TypeScript files in your project. This
-tool runs in two modes:
+A CLI tool for applying prettier to all TypeScript files in your project. It
+automatically reads your `tsconfig.json` from the current working directory,
+expands a list from that config file, and rewrites every file in that list.
+This tool runs in two modes:
 
-- Project mode, which automatically reads your `tsconfig.json` from the current
-  working directory, expands a list from that config file, and rewrites every
-  file in that list. This is activated by invoking `kvikk-fix`, with no
-  arguments.
-- File mode, which rewrites every file provided as an argument. This is
-  activated by invoking `kvikk-fix file1.ts and-so-forth.ts`.
+- Rewrite mode, which does what is described above. This is the default mode.
+- Check mode, a dry run which outputs which files would have been rewritten
+  by prettier, but does not actually rewrite. This is enabled by supplying
+  the `-l` or `--list-different` flag when invoking. One way to use this mode
+  is to use it in a CI job to prevent unformatted code from being checked in.
 
 ## Stability
 
@@ -41,6 +42,18 @@ npm install --save-dev kvikk-fix
 Make sure the peer dependencies `prettier` and `typescript` are fulfilled
 first, e.g. by having them as dev dependencies in your project. As of writing,
 `kvikk-fix` requires at least `prettier@1.6.0` and `typescript@2.1.0`.
+
+## Errors and Exit Status
+
+Here is a list of exit statuses common across both modes:
+
+- `0`, the operation completed successfully
+- `1`, the supplied flag was not recognized
+- `2`, there was an error in reading, writing, or resolving the configuration.
+
+The exit status `3` is exclusive to check mode. It occurs when there are files
+that do not conform to prettier's standards, and would have been rewritten by
+it.
 
 ## Configuration
 
